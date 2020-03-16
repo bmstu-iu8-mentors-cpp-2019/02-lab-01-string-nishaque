@@ -15,6 +15,7 @@ String::String(const String &rhs) {
   for (size_t i = 0; i < size; i++) {
     str[i] = rhs.str[i];
   }
+  str[size] = '\0';
 }
 
 String::String(const char *data) {
@@ -23,6 +24,7 @@ String::String(const char *data) {
   for (size_t i = 0; i < size; i++) {
     str[i] = data[i];
   }
+  str[size] = '\0';
 }
 
 String &String::operator=(const String &rhs) {
@@ -66,7 +68,7 @@ String &String::operator*=(unsigned int m) {
 }
 
 bool String::operator==(const String &rhs) const {
-  return (std::strcmp(str, rhs.str) == 0);
+  return !std::strcmp(str, rhs.str);
 }
 
 bool String::operator<(const String &rhs) const {
@@ -103,7 +105,7 @@ char String::operator[](size_t index) const {
 }
 
 char &String::operator[](size_t index) {
-  if (index > std::strlen(str)) throw std::out_of_range("index is too big");
+  if (index > size) throw std::out_of_range("index is too big");
   return str[index];
 }
 
