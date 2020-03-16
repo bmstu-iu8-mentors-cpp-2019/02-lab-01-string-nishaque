@@ -6,7 +6,7 @@ String::~String() { delete[] str; }
 String::String() {
   str = new char[1];
   str[0] = '\0';
-  size = 1;
+  size = 0;
 }
 
 String::String(const String &rhs) {
