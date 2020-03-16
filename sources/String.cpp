@@ -38,7 +38,7 @@ String &String::operator=(const String &rhs) {
 }
 
 String &String::operator+=(const String &rhs) {
-  size_t i = strlen(str);
+  size_t i = size;
   char *r = new char[size + rhs.size + 1];
   for (size_t j = 0; j < size; j++) {
     r[j] = str[j];
