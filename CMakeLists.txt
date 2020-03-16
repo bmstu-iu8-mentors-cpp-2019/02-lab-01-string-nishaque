@@ -36,7 +36,7 @@ add_library(template STATIC
 )
 add_executable(tests
         ${CMAKE_CURRENT_SOURCE_DIR}/sources/String.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/sources/main.cpp
+        #${CMAKE_CURRENT_SOURCE_DIR}/sources/main.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/tests/string_unittest.cpp
 )
 
