@@ -12,18 +12,14 @@ String::String() {
 String::String(const String &rhs) {
   size = rhs.size;
   str = new char[size + 1];
-  for (size_t i = 0; i < size; i++) {
-    str[i] = rhs.str[i];
-  }
+  std::copy(rhs.str, rhs.str + rhs.size, str);
   str[size] = '\0';
 }
 
 String::String(const char *data) {
   size = std::strlen(data);
   str = new char[size + 1];
-  for (size_t i = 0; i < size; i++) {
-    str[i] = data[i];
-  }
+  std::copy(data, data + size, str);
   str[size] = '\0';
 }
 
@@ -34,20 +30,15 @@ String &String::operator=(const String &rhs) {
   delete[] str;
   size = rhs.size;
   str = new char[size + 1];
-  for (size_t j = 0; j < rhs.size; j++) str[j] = rhs.str[j];
+  std::copy(rhs.str, rhs.str + rhs.size, str);
   str[rhs.size] = '\0';
   return *this;
 }
 
 String &String::operator+=(const String &rhs) {
-  size_t i = size;
   char *r = new char[size + rhs.size + 1];
-  for (size_t j = 0; j < size; j++) {
-    r[j] = str[j];
-  }
-  for (size_t j = 0; j < rhs.size; j++) {
-    r[i + j] = rhs.str[j];
-  }
+  std::copy(str, str + size, r);
+  std::copy(rhs.str, rhs.str + rhs.size, r + size);
   r[size + rhs.size] = '\0';
   delete[] str;
   str = r;
@@ -57,8 +48,8 @@ String &String::operator+=(const String &rhs) {
 
 String &String::operator*=(unsigned int m) {
   char *temp = new char[size * m + 1];
-  for (size_t i = 0, t = 0; i < m; ++i, t += std::strlen(str)) {
-    std::copy(str, str + std::strlen(str), temp + t);
+  for (size_t i = 0, t = 0; i < m; ++i, t += size) {
+    std::copy(str, str + size, temp + t);
   }
   size = size * m;
   temp[size] = '\0';
@@ -76,7 +67,7 @@ bool String::operator<(const String &rhs) const {
 }
 
 size_t String::Find(const String &substr) const {
-  for (size_t i = 0; i < size; i++) {
+  for (size_t i = 0; i < size - substr.size + 1; i++) {
     size_t j = 0;
     while ((substr.str[j] == str[i + j]) && (j < substr.size)) j++;
     if (j == substr.size) return i;
@@ -100,7 +91,7 @@ bool String::Empty() const {
 }
 
 char String::operator[](size_t index) const {
-  if (index > std::strlen(str)) throw std::out_of_range("index is too big");
+  if (index > size) throw std::out_of_range("index is too big");
   return str[index];
 }
 
@@ -145,8 +136,6 @@ void String::LTrim(char symbol) {
 
 void String::swap(String &oth) { std::swap(*this, oth); }
 
-std::ostream &operator<<(std::ostream &, const String &);
-
 String operator+(const String &a, const String &b) {
   return String(a) += String(b);
 }
@@ -158,8 +147,6 @@ bool operator!=(const String &a, const String &b) { return !(a == b); }
 bool operator>(const String &a, const String &b) { return b < a; }
 
 std::ostream &operator<<(std::ostream &out, const String &str) {
-  for (size_t i = 0; i < str.size; i++) {
-    out << str.str[i];
-  }
+  out << str.str;
   return out;
 }
